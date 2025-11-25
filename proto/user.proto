@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "github.com/nguyenphuoc/super-salary-sacrifice/proto/user";
+
+import "google/protobuf/timestamp.proto";
+
+// UserService handles user management operations
+service UserService {
+  // CreateUser creates a new user
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  
+  // GetUser retrieves a user by ID
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  
+  // ListUsers retrieves a paginated list of users
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+}
+
+// User message represents a user
+message User {
+  string id = 1;
+  string email = 2;
+  string first_name = 3;
+  string last_name = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// CreateUser messages
+message CreateUserRequest {
+  string email = 1;
+  string first_name = 2;
+  string last_name = 3;
+}
+
+message CreateUserResponse {
+  User user = 1;
+}
+
+// GetUser messages
+message GetUserRequest {
+  string user_id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+// ListUsers messages
+message ListUsersRequest {
+  int32 offset = 1;
+  int32 limit = 2;
+}
+
+message ListUsersResponse {
+  repeated User users = 1;
+  int32 total = 2;
+}
