@@ -15,10 +15,11 @@ output "public_subnet_ids" {
 }
 
 
-# output "private_subnet_ids" {
-#   description = "Private subnet IDs"
-#   value       = module.networking.private_subnet_ids
-# }
+output "private_subnet_ids" {
+  description = "Private subnet IDs"
+  value       = module.networking.private_subnet_ids
+}
+
 
 # TODO: Uncomment after creating ECR module
 # output "ecr_repository_url" {

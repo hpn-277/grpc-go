@@ -52,3 +52,28 @@ resource "aws_subnet" "public" {
     }
   )
 }
+
+# ============================================
+# Private Subnets (for RDS)
+# ============================================
+
+# Calculate subnet CIDR blocks
+# Private Subnet 1: 10.0.11.0/24 (256 IPs)
+# Private Subnet 2: 10.0.12.0/24 (256 IPs)
+
+resource "aws_subnet" "private" {
+  count = length(var.availability_zones)
+
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index + 11)
+  availability_zone       = var.availability_zones[count.index]
+  map_public_ip_on_launch = false  # No public IPs for private subnets
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${local.name_prefix}-private-subnet-${count.index + 1}"
+      Type = "Private"
+    }
+  )
+}
