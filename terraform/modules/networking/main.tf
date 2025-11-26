@@ -122,3 +122,61 @@ resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
+
+# ============================================
+# Security Groups
+# ============================================
+
+# 1. ECS Task Security Group
+resource "aws_security_group" "ecs_tasks" {
+  name        = "${local.name_prefix}-ecs-tasks-sg"
+  description = "Allow inbound traffic to ECS tasks"
+  vpc_id      = aws_vpc.main.id
+
+  # Inbound: Allow gRPC traffic from anywhere
+  ingress {
+    description = "Allow gRPC traffic from anywhere"
+    from_port   = var.container_port
+    to_port     = var.container_port
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Outbound: Allow all traffic (needed for pulling images, reaching RDS, etc.)
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${local.name_prefix}-ecs-tasks-sg"
+    }
+  )
+}
+
+# 2. RDS Security Group
+resource "aws_security_group" "rds" {
+  name        = "${local.name_prefix}-rds-sg"
+  description = "Allow inbound traffic to RDS from ECS tasks only"
+  vpc_id      = aws_vpc.main.id
+
+  # Inbound: Allow PostgreSQL traffic ONLY from ECS tasks
+  ingress {
+    description     = "Allow PostgreSQL from ECS tasks"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ecs_tasks.id]
+  }
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${local.name_prefix}-rds-sg"
+    }
+  )
+}

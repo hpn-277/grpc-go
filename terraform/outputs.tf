@@ -54,10 +54,12 @@ output "private_subnet_ids" {
 #   value       = module.ecs.service_name
 # }
 
-# output "ecs_task_security_group_id" {
-#   description = "ECS task security group ID"
-#   value       = module.ecs.task_security_group_id
-# }
+
+output "ecs_task_security_group_id" {
+  description = "ECS task security group ID"
+  value       = module.networking.ecs_tasks_sg_id
+}
+
 
 # output "cloudwatch_log_group" {
 #   description = "CloudWatch log group name"
