@@ -26,3 +26,29 @@ resource "aws_vpc" "main" {
     }
   )
 }
+
+# ============================================
+# Public Subnets (for ECS tasks)
+# ============================================
+
+# Calculate subnet CIDR blocks
+# VPC: 10.0.0.0/16 (65,536 IPs)
+# Public Subnet 1: 10.0.1.0/24 (256 IPs)
+# Public Subnet 2: 10.0.2.0/24 (256 IPs)
+
+resource "aws_subnet" "public" {
+  count = length(var.availability_zones)
+
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index + 1)
+  availability_zone       = var.availability_zones[count.index]
+  map_public_ip_on_launch = true  # Auto-assign public IPs to instances
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${local.name_prefix}-public-subnet-${count.index + 1}"
+      Type = "Public"
+    }
+  )
+}

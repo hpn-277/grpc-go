@@ -8,11 +8,12 @@ output "vpc_cidr" {
   value       = module.networking.vpc_cidr
 }
 
-# TODO: Uncomment after creating subnets in networking module
-# output "public_subnet_ids" {
-#   description = "Public subnet IDs"
-#   value       = module.networking.public_subnet_ids
-# }
+
+output "public_subnet_ids" {
+  description = "Public subnet IDs"
+  value       = module.networking.public_subnet_ids
+}
+
 
 # output "private_subnet_ids" {
 #   description = "Private subnet IDs"
