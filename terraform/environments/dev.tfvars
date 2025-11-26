@@ -1,12 +1,12 @@
 # Development Environment Configuration
 
-aws_region         = "us-east-1"
+aws_region         = "ap-southeast-2"
 environment        = "dev"
 project_name       = "grpc-go"
 
 # Network Configuration
 vpc_cidr           = "10.0.0.0/16"
-availability_zones = ["us-east-1a", "us-east-1b"]
+availability_zones = ["ap-southeast-2a", "ap-southeast-2b"]
 
 # ECS Configuration (Minimal for cost savings)
 ecs_task_cpu       = 256   # 0.25 vCPU
@@ -19,7 +19,7 @@ db_instance_class    = "db.t3.micro"  # Smallest instance
 db_allocated_storage = 20             # Minimum storage
 db_name              = "super_salary_db"
 db_username          = "superuser"
-# db_password is set via environment variable: TF_VAR_db_password
+db_password          = "temporary-password-change-later"  # Temporary default, will be required when RDS module is enabled
 
 # Application Configuration
 container_port      = 50051

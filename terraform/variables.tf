@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "AWS region to deploy resources"
   type        = string
-  default     = "us-east-1"
+  default     = "ap-southeast-2"
 }
 
 variable "environment" {
@@ -25,7 +25,7 @@ variable "vpc_cidr" {
 variable "availability_zones" {
   description = "List of availability zones"
   type        = list(string)
-  default     = ["us-east-1a", "us-east-1b"]
+  default     = ["ap-southeast-2a", "ap-southeast-2b"]
 }
 
 # ECS Configuration
@@ -82,6 +82,7 @@ variable "db_password" {
   description = "Database master password (use environment variable or secrets manager)"
   type        = string
   sensitive   = true
+  default     = "temporary-password-change-later"  # Temporary default, will be required when RDS module is enabled
 }
 
 # Application Configuration
